@@ -32,8 +32,9 @@ class LinkedInScraper:
         inputData = self.loadSearchData(inputFile)
 
         #login
-        self.getCredentials()
         self.driver.get('http://www.linkedin.com')
+        self.getCredentials()
+
 
         outputData = []
         failed = []
@@ -153,7 +154,7 @@ class LinkedInScraper:
 
     def extractExperiences(self, currentOnly=False):
 
-        elem = WebDriverWait(self.driver, 2, poll_frequency=0.1).until(
+        elem = WebDriverWait(self.driver, 10, poll_frequency=0.1).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "experience-section"))
             )
         elems = elem.find_elements_by_class_name('pv-profile-section__card-item')
