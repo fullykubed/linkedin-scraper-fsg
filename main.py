@@ -32,8 +32,8 @@ class LinkedInScraper:
         inputData = self.loadSearchData(inputFile)
 
         #login
-        self.driver.get('http://www.linkedin.com')
         self.getCredentials()
+        self.driver.get('http://www.linkedin.com')
 
         outputData = []
         failed = []
