@@ -3,10 +3,10 @@
 (1) Install [Python 3.5 or later](https://www.python.org/downloads/)
 (2) Install [Git](https://git-scm.com/downloads)
 (3) Run the following commands from the command line:
-- `pip install selenium`
-- `pip install chromedriver_installer`
+    - `pip install selenium`
+    - `pip install chromedriver_installer`
 (4) Via the command line, navigate to the directory you'd like to access the program
-(5) Execute ```git clone https://github.com/jclangst/linkedin-scraper-fsg.git
+(5) Execute ```git clone https://github.com/jclangst/linkedin-scraper-fsg.git```
 
 
 ## Run Instructions
