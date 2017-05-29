@@ -71,8 +71,9 @@ class LinkedInScraper:
 
                 outputData[i].pop()
                 self.driver.get(url)
-                outputData.append(self.extractExperiences(True))
-
+                inputData[i][3] = url
+                outputData[i].append(self.extractExperiences(True))
+               # outputData[i].append("SEARCH CONSTRAINT RELAXED")
             numRetry -= 1
 
 
@@ -89,7 +90,7 @@ class LinkedInScraper:
         master = Tk()
         master.title("LinkedIn Credentials")
 
-        w = 250  # width for the Tk root
+        w = 350  # width for the Tk root
         h = 100  # height for the Tk root
 
         # get screen width and height
@@ -137,6 +138,7 @@ class LinkedInScraper:
 
     def search(self, key):
         elem = self.driver.find_element_by_xpath("//input[@placeholder='Search']")
+        elem.clear()
         elem.send_keys(key)
         elem.send_keys(Keys.RETURN)
 
@@ -154,26 +156,37 @@ class LinkedInScraper:
 
     def extractExperiences(self, currentOnly=False):
 
-        elem = WebDriverWait(self.driver, 10, poll_frequency=0.1).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "experience-section"))
-            )
-        elems = elem.find_elements_by_class_name('pv-profile-section__card-item')
-
         experiences = []
+        try:
 
+            elem = WebDriverWait(self.driver, 10, poll_frequency=0.1).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "experience-section")))
 
-        for elem in elems:
-            meta = elem.find_element_by_class_name('pv-entity__summary-info')
+            elems = elem.find_elements_by_class_name('pv-profile-section__card-item')
 
+            for elem in elems:
+                meta = elem.find_element_by_class_name('pv-entity__summary-info')
 
-            if (not currentOnly or 'Present' in meta.find_element_by_class_name('pv-entity__date-range').text):
-                jobInfo = [meta.find_element_by_tag_name('h3').text,
-                           meta.find_element_by_class_name('pv-entity__secondary-title').text,
-                           meta.find_element_by_class_name('pv-entity__location').text[9:]]
+                dateRange = meta.find_elements_by_class_name('pv-entity__date-range')
+                if (not currentOnly or (len(dateRange) > 0 and 'Present' in dateRange[0].text)):
+                    jobInfo = [meta.find_element_by_tag_name('h3').text]
 
+                    company = meta.find_elements_by_class_name('pv-entity__secondary-title')
+                    if len(company) > 0:
+                        jobInfo.append(company[0].text)
+                    else:
+                        jobInfo.append("UNKNOWN COMPANY")
 
+                    location = meta.find_elements_by_class_name('pv-entity__location')
+                    if len(location) > 0:
+                        jobInfo.append(location[0].text[9:])
+                    else:
+                        jobInfo.append("UNKNOWN LOCATION")
 
-                experiences.extend(jobInfo)
+                    experiences.extend(jobInfo)
+
+        except TimeoutException:
+            pass
 
         return experiences
 
