@@ -88,7 +88,7 @@ class LinkedInScraper:
         master = Tk()
         master.title("LinkedIn Credentials")
 
-        w = 350  # width for the Tk root
+        w = 250  # width for the Tk root
         h = 100  # height for the Tk root
 
         # get screen width and height
